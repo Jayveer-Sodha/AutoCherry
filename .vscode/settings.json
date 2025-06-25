@@ -1,0 +1,21 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "prettier.printWidth": 150, // Slightly wider lines to reduce excessive wrapping
+  "prettier.tabWidth": 2,
+  "prettier.useTabs": false,
+  "prettier.singleQuote": true,
+  "prettier.trailingComma": "all", // No unnecessary trailing commas
+  "prettier.bracketSpacing": true,
+  "prettier.arrowParens": "avoid", // Cleaner arrow functions
+  "prettier.endOfLine": "lf",
+  "prettier.proseWrap": "preserve", // Avoid excessive new lines in text files
+  "prettier.htmlWhitespaceSensitivity": "ignore", // Minimize unnecessary white space
+  "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[typescript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[json]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[html]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[css]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[markdown]": { "editor.wordWrap": "on" }
+}
