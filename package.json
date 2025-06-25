@@ -15,24 +15,42 @@
   ],
   "main": "extension/extension.js",
   "contributes": {
-    "commands": [
-      {
-        "command": "autocherry.helloWorld",
-        "title": "Hello World"
-      }
-    ]
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "autocherry",
+          "title": "AutoCherry",
+          "icon": "extension/assets/cherry.png"
+        }
+      ]
+    },
+    "views": {
+      "autocherry": [
+        {
+          "type": "webview",
+          "id": "autoCherryView",
+          "name": " 🚀 Smart Cherry-Picker",
+          "icon": "extension/public/cherry.png"
+        }
+      ]
+    }
   },
   "scripts": {
     "lint": "eslint .",
     "pretest": "npm run lint",
-    "test": "vscode-test"
+    "test": "vscode-test",
+    "build": "vite build --config webview/vite.config.js",
+    "dev": "nodemon --watch webview --ext js,jsx,ts,tsx,css --ignore webview/dist --exec \"npm run build\""
   },
   "devDependencies": {
-    "@types/vscode": "^1.101.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
-    "eslint": "^9.25.1",
+    "@types/vscode": "^1.101.0",
+    "@vitejs/plugin-react": "^4.6.0",
     "@vscode/test-cli": "^0.0.10",
-    "@vscode/test-electron": "^2.5.2"
+    "@vscode/test-electron": "^2.5.2",
+    "eslint": "^9.25.1",
+    "nodemon": "^3.1.10",
+    "vite": "^7.0.0"
   }
 }

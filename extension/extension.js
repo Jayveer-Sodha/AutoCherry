@@ -1,18 +1,10 @@
 const vscode = require('vscode');
+const { AutoCherryViewProvider } = require('./views/autoCherryView');
 
-function activate(context) {
-  console.log('Congratulations, your extension "autocherry" is now active!');
-
-  const disposable = vscode.commands.registerCommand('autocherry.helloWorld', function () {
-    vscode.window.showInformationMessage('Hello World from AutoCherry!');
-  });
-
-  context.subscriptions.push(disposable);
+async function activate(context) {
+  // 1. Register your webview
+  const provider = new AutoCherryViewProvider(context);
+  context.subscriptions.push(vscode.window.registerWebviewViewProvider('autoCherryView', provider));
 }
 
-function deactivate() {}
-
-module.exports = {
-  activate,
-  deactivate,
-};
+module.exports = { activate };
