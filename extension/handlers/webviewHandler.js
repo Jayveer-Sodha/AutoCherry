@@ -30,4 +30,8 @@ async function initializeWebview({ webviewView, context, htmlPath, assetsRoot = 
   }
 }
 
-module.exports = { initializeWebview };
+function sendToWebview({ type = '', payload = {}, webview }) {
+  webview.postMessage({ type, payload });
+}
+
+module.exports = { initializeWebview, sendToWebview };

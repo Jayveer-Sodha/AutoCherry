@@ -1,0 +1,79 @@
+/* Section Component Style Starts */
+
+.section {
+  padding: 15px 0;
+}
+
+/* Only one section: top + bottom  */
+.section:only-of-type {
+  border-top: 1px solid #363636;
+  border-bottom: 1px solid #363636;
+}
+
+/* First section: top only */
+.section:first-of-type:not(:only-of-type) {
+  border-top: 1px solid #363636;
+  border-bottom: none;
+}
+
+/* Last section: bottom only (unless it's also second, see below) */
+.section:last-of-type:not(:only-of-type):not(:first-of-type) {
+  border-top: none;
+  border-bottom: 1px solid #363636;
+}
+
+/* Middle sections (between first and last) */
+.section:not(:first-of-type):not(:last-of-type) {
+  border-top: 1px solid #363636;
+  border-bottom: 1px solid #363636;
+}
+
+/* Two sections only */
+.section:first-of-type:not(:only-of-type) + .section:last-of-type {
+  border-top: 1px solid #363636;
+  border-bottom: 1px solid #363636;
+}
+/* Section Component Style Ends */
+
+/* AuthButtons Component Style Starts */
+.authButtonsSection {
+  display: flex;
+  gap: 5px;
+}
+.authButtonsSection button {
+  width: 100%;
+}
+
+.authSuccessDiv {
+  text-align: center;
+  color: green;
+  font-weight: 600;
+}
+
+.authErrorDiv {
+  text-align: center;
+  color: red;
+  margin-top: 10px;
+}
+/* AuthButtons Component Style Ends */
+
+/* Button Component Style starts */
+.buttonContainer {
+  width: 100%;
+}
+
+.buttonContainer button {
+  padding: 5px;
+  background-color: #007acc;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  width: 100%;
+}
+
+.buttonContainer button:hover {
+  background-color: #005fa3;
+}
+/* Button Component Style ends */
