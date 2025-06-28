@@ -73,7 +73,109 @@
   width: 100%;
 }
 
-.buttonContainer button:hover {
-  background-color: #005fa3;
+.disabled button {
+  background-color: #636363;
 }
+
 /* Button Component Style ends */
+
+.searchInputContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .errorlable {
+    word-wrap: break-word;
+    color: red;
+  }
+}
+
+.searchInput {
+  padding: 5px;
+}
+
+.commits-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.commit-item {
+  border: 1px solid #363636;
+  border-radius: 5px;
+  padding: 5px;
+  word-wrap: break-word;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.commit-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.commit-info {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.commit-info input {
+  margin: 0px;
+}
+.commit-date {
+  color: #666;
+  font-weight: normal;
+}
+
+.commit-sha {
+  font-size: 0.85rem;
+  color: #999;
+  overflow-wrap: break-word;
+}
+
+.finalCommitsDiv {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: small;
+}
+
+.finalCommitsDiv span {
+  border: 1px solid #363636;
+  border-radius: 5px;
+  padding: 5px 3px;
+  word-wrap: break-word;
+}
+
+.pullrequestInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .header {
+    margin: 0px;
+  }
+}
+
+.cherryPickSuccess {
+  word-wrap: break-word;
+  color: green;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.cherryPickSuccess a {
+  color: #4e4eff;
+  margin-top: 5px;
+}
+
+.cherryPickError {
+  word-wrap: break-word;
+  color: red;
+}

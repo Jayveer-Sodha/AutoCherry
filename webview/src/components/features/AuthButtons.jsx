@@ -1,5 +1,6 @@
 import { useCallback } from 'react';
 import Button from '../common/Button';
+import Section from '../common/Section';
 import { useMessage } from '../../hooks/useMessage';
 import { postToExtension } from '../../handlers/MessageHandlers';
 import { AUTH_TYPE, GIT_LABEL, MESSAGE_TYPE } from '../../../../shared/constants';
@@ -22,9 +23,15 @@ const AuthButtons = () => {
     [setState],
   );
 
-  if (isAuthenticated) return <div className="authSuccessDiv">Connected to {authData.provider}</div>;
+  if (isAuthenticated)
+    return (
+      <Section>
+        <div className="authSuccessDiv">Connected to {authData.provider}</div>
+      </Section>
+    );
+
   return (
-    <>
+    <Section>
       <div className="authButtonsSection">
         <Button
           disabled={isBitbucketLoading}
@@ -40,7 +47,7 @@ const AuthButtons = () => {
         />
       </div>
       {authData?.error?.message && <div className="authErrorDiv">{authData.error.message}</div>}
-    </>
+    </Section>
   );
 };
 export default AuthButtons;
