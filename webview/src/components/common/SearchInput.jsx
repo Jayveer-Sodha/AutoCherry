@@ -2,12 +2,13 @@ import Button from './Button';
 import { useEffect, useState } from 'react';
 
 const SearchInput = ({
-  error = null,
+  error = 'text',
   inputPlaceholder = 'Type...',
   onSearch,
   buttonLabel = 'Search',
   inputLabel = 'Enter pull request number...',
   isLoading,
+  type = undefined,
 }) => {
   const [value, setValue] = useState('');
   const [searchError, setSearchError] = useState(null);
@@ -35,7 +36,7 @@ const SearchInput = ({
   return (
     <div className="searchInputContainer">
       <label>{inputLabel}</label>
-      <input type="text" value={value} onChange={handleChange} placeholder={inputPlaceholder} className="searchInput" />
+      <input type={type} value={value} onChange={handleChange} placeholder={inputPlaceholder} className="searchInput" />
       <Button isLoading={isLoading} disabled={isDisable} label={buttonLabel} handleOnClick={handleOnClick} />
       {searchError?.key && value && !isLoading && (
         <div className="errorlable">

@@ -3,27 +3,31 @@ import Section from '../common/Section';
 import { useMessage } from '../../hooks/useMessage';
 import { MESSAGE_TYPE } from '../../../../shared/constants';
 import { postToExtension } from '../../handlers/MessageHandlers';
+import { updateContextState } from '../../contexts/MessageContext';
 
 const CherryPick = () => {
   const { state, setState } = useMessage();
-  const { selectedCommits, branchName, cherryPickError, cherryPickSuccess, loading } = state;
-  const isVisible = branchName && selectedCommits.length;
-  const isLoading = loading.cherryPickCTA || false;
+  const {
+    branch: { name = '' } = {},
+    loading: { cherryPickCTA = false } = {},
+    pullRequest: { selectedCommits = [] } = {},
+    cherryPick: { error = null, success = null } = {},
+  } = state;
 
-  console.warn(state);
+  const isVisible = name && selectedCommits.length;
+
   const handleOnClick = () => {
-    console.warn({ selectedCommits, branchName });
-    setState(prev => ({ ...prev, loading: { ...prev.loading, cherryPickCTA: true } }));
+    updateContextState(setState, { loading: { cherryPickCTA: true } });
     postToExtension({
       type: MESSAGE_TYPE.CHERRY_PICK_REQUEST,
-      payload: { targetBranch: branchName, commits: selectedCommits, provider: 'bitbucket' },
+      payload: { targetBranch: name, commits: selectedCommits, provider: 'bitbucket' },
     });
   };
 
   if (!isVisible) return;
 
-  if (cherryPickError) {
-    const { message } = cherryPickError;
+  if (error) {
+    const { message } = error;
 
     return (
       <Section className="cherryPickError">
@@ -32,19 +36,23 @@ const CherryPick = () => {
     );
   }
 
-  if (cherryPickSuccess) {
-    const { branchUrl, message, branch } = cherryPickSuccess;
+  if (success) {
+    const { branchUrl, message, branch } = success;
     return (
       <Section className="cherryPickSuccess">
-        <div>{message}</div>
-        <a href={branchUrl}>{branch}</a>
+        <div>
+          <strong>Message: </strong> <span>{message}</span>
+        </div>
+        <div>
+          <strong>Link: </strong> <a href={branchUrl}>{branch}</a>
+        </div>
       </Section>
     );
   }
 
   return (
     <Section>
-      <Button isLoading={isLoading} label="Let's Cherry Pick" handleOnClick={handleOnClick} />
+      <Button isLoading={cherryPickCTA} label="Let's Cherry Pick" handleOnClick={handleOnClick} />
     </Section>
   );
 };

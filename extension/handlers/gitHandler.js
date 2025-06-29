@@ -26,7 +26,7 @@ async function fetchCommitsHandler({ prId, context, webview }) {
         provider: AUTH_TYPE.BITBUCKET,
         commits: [],
         prId,
-        error: err,
+        error: { key: 'Message : ', value: err.message },
       },
     });
   }
@@ -53,11 +53,7 @@ async function fetchBranchDetailsHandler({ branchName, context, webview }) {
       webview,
       type: MESSAGE_TYPE.FETCH_BRANCH_ERROR,
       payload: {
-        isBranchAvailable: false,
-        branchError: {
-          branchName,
-          message: error.message,
-        },
+        error: { key: 'Message : ', value: error.message },
       },
     });
   }
@@ -69,14 +65,12 @@ async function cherryPickCommits({ targetBranch, commits, provider, webview }) {
 
   try {
     await git.fetch();
-
-    // Checkout the target branch
     await git.checkout(targetBranch);
-    console.log(`✅ Checked out to ${targetBranch}`);
 
     const orderedCommits = [...commits].sort((a, b) => new Date(a.date) - new Date(b.date));
 
     const cherryPicked = [];
+    const skippedCommits = [];
 
     for (const commit of orderedCommits) {
       const sha = typeof commit === 'string' ? commit : commit.sha;
@@ -88,16 +82,17 @@ async function cherryPickCommits({ targetBranch, commits, provider, webview }) {
       } catch (err) {
         const errMessage = err.message || '';
 
-        if (
+        const isDuplicate =
           /The previous cherry-pick is now empty/i.test(errMessage) ||
           /is a duplicate of a commit already applied/i.test(errMessage) ||
-          (/could not apply/i.test(errMessage) && errMessage.includes('patch failed'))
-        ) {
+          (/could not apply/i.test(errMessage) && errMessage.includes('patch failed'));
+
+        if (isDuplicate) {
           console.warn(`⚠️ Skipping duplicate commit ${sha}`);
           await git.raw(['cherry-pick', '--skip']);
+          skippedCommits.push(sha);
           continue;
         }
-
         if (/conflict/i.test(errMessage) || /merge conflict/i.test(errMessage)) {
           console.error(`❌ Merge conflict while applying ${sha}`);
           await git.raw(['cherry-pick', '--abort']);
@@ -138,6 +133,18 @@ async function cherryPickCommits({ targetBranch, commits, provider, webview }) {
     const remoteUrl = await getRemoteUrl(repoPath);
     const branchUrl = getBranchUrl(remoteUrl, targetBranch, provider);
 
+    let message = '';
+
+    if (cherryPicked.length && skippedCommits.length) {
+      message = `Cherry-picked ${cherryPicked.length} commit(s) and skipped ${skippedCommits.length} duplicate commit(s). All changes pushed to "${targetBranch}".`;
+    } else if (cherryPicked.length) {
+      message = `Cherry-picked ${cherryPicked.length} commit(s) and pushed to "${targetBranch}".`;
+    } else if (skippedCommits.length) {
+      message = `${skippedCommits.length} commit${skippedCommits.length === 1 ? '' : '(s)'} were skipped (likely duplicates). No new commits pushed.`;
+    } else {
+      message = `No commits were cherry-picked or skipped. Nothing changed.`;
+    }
+
     sendToWebview({
       webview,
       type: MESSAGE_TYPE.CHERRY_PICK_SUCCESS,
@@ -146,7 +153,7 @@ async function cherryPickCommits({ targetBranch, commits, provider, webview }) {
           commits: cherryPicked,
           branch: targetBranch,
           branchUrl,
-          message: `Successfully cherry-picked and pushed ${cherryPicked.length} commit(s).`,
+          message,
         },
       },
     });

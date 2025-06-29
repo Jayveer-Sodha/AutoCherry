@@ -3,18 +3,19 @@ import Button from '../common/Button';
 import Section from '../common/Section';
 import { useMessage } from '../../hooks/useMessage';
 import { postToExtension } from '../../handlers/MessageHandlers';
+import { updateContextState } from '../../contexts/MessageContext';
 import { AUTH_TYPE, GIT_LABEL, MESSAGE_TYPE } from '../../../../shared/constants';
 
 const AuthButtons = () => {
   const { state, setState } = useMessage();
-  const { isAuthenticated, authData, loading } = state;
+  const { app, loading } = state;
+  const { isAuthenticated, authData } = app;
   const isBitbucketLoading = loading?.bitbucket || false;
   const isGithubLoading = loading?.github || false;
 
   const requestAuth = useCallback(
     provider => {
-      setState(prev => ({ ...prev, authData: null, loading: { ...prev.loading, [provider]: true } }));
-
+      updateContextState(setState, { app: { authData: null, loading: { [provider]: true } } });
       postToExtension({
         type: MESSAGE_TYPE.AUTH_REQUEST,
         payload: { provider },

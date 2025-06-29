@@ -10,18 +10,51 @@ export const initialLoadingState = {
   searchBranchCTA: false,
 };
 
-export const initialContextState = {
+export const initialPullRequestState = {
+  details: null,
+  commits: [],
+  selectedCommits: [],
+  error: null,
+};
+
+export const initialBranchState = {
+  name: null,
+  isAvailable: false,
+  error: null,
+};
+
+export const initialCherryPickState = {
+  error: null,
+  success: null,
+};
+
+export const initialAppState = {
   isAuthenticated: false,
   authData: null,
-  prDetails: null,
-  prCommits: [],
-  selectedCommits: [],
-  isBranchAvailable: false,
-  branchError: null,
-  cherryPickError: null,
-  cherryPickSuccess: null,
-  branchName: null,
+};
+
+export const initialContextState = {
+  app: initialAppState,
+  pullRequest: initialPullRequestState,
+  branch: initialBranchState,
+  cherryPick: initialCherryPickState,
   loading: initialLoadingState,
+};
+
+export const updateContextState = (setState, updates) => {
+  setState(prev => {
+    const next = { ...prev };
+
+    for (const key in updates) {
+      if (typeof updates[key] === 'object' && !Array.isArray(updates[key]) && updates[key] !== null) {
+        next[key] = { ...prev[key], ...updates[key] };
+      } else {
+        next[key] = updates[key];
+      }
+    }
+
+    return next;
+  });
 };
 
 const MessageProvider = ({ children }) => {
@@ -32,75 +65,66 @@ const MessageProvider = ({ children }) => {
       const { type, payload } = event.data;
 
       if (type === MESSAGE_TYPE.AUTH_SUCCESS) {
-        setState(prev => ({
-          ...prev,
-          isAuthenticated: true,
-          authData: { ...payload },
-          loading: { ...prev.loading, github: false, bitbucket: false },
-        }));
+        updateContextState(setState, {
+          app: { isAuthenticated: true, authData: { ...payload } },
+          loading: { github: false, bitbucket: false },
+        });
         return;
       }
 
       if (type === MESSAGE_TYPE.AUTH_ERROR) {
-        setState(prev => ({
-          ...prev,
-          isAuthenticated: false,
-          authData: { ...payload },
-          loading: { ...prev.loading, github: false, bitbucket: false },
-        }));
+        updateContextState(setState, {
+          app: { isAuthenticated: false, authData: { ...payload } },
+          loading: { github: false, bitbucket: false },
+        });
         return;
       }
 
       if (type === MESSAGE_TYPE.FETCH_COMMITS_SUCCESS) {
-        console.warn({ payload });
-        setState(prev => ({
-          ...prev,
-          prCommits: payload.prCommits,
-          prDetails: payload.prDetails,
-          loading: { ...prev.loading, fetchCommitsCTA: false },
-        }));
+        updateContextState(setState, {
+          pullRequest: { commits: payload.prCommits, details: payload.prDetails },
+          loading: { fetchCommitsCTA: false },
+        });
+        return;
+      }
+
+      if (type === MESSAGE_TYPE.FETCH_COMMITS_ERROR) {
+        updateContextState(setState, {
+          pullRequest: { commits: [], details: null, error: payload.error },
+          loading: { fetchCommitsCTA: false },
+        });
         return;
       }
 
       if (type === MESSAGE_TYPE.FETCH_BRANCH_SUCCESS) {
-        console.warn({ payload });
-        setState(prev => ({
-          ...prev,
-          isBranchAvailable: payload.isBranchAvailable,
-          branchName: payload.branchName,
-          loading: { ...prev.loading, searchBranchCTA: false },
-        }));
+        updateContextState(setState, {
+          branch: { isAvailable: payload.isBranchAvailable, name: payload.branchName },
+          loading: { searchBranchCTA: false },
+        });
         return;
       }
 
       if (type === MESSAGE_TYPE.FETCH_BRANCH_ERROR) {
-        console.warn({ payload });
-        setState(prev => ({
-          ...prev,
-          isBranchAvailable: payload.isBranchAvailable,
-          branchError: payload.branchError,
-          loading: { ...prev.loading, searchBranchCTA: false },
-        }));
+        updateContextState(setState, {
+          branch: { isAvailable: false, error: payload.error },
+          loading: { searchBranchCTA: false },
+        });
         return;
       }
 
       if (type === MESSAGE_TYPE.CHERRY_PICK_SUCCESS) {
-        console.warn({ payload });
-        setState(prev => ({
-          ...prev,
-          loading: { ...prev.loading, cherryPickCTA: false },
-          cherryPickSuccess: payload.cherryPickSuccess,
-        }));
+        updateContextState(setState, {
+          cherryPick: { success: payload.cherryPickSuccess },
+          loading: { cherryPickCTA: false },
+        });
         return;
       }
 
       if (type === MESSAGE_TYPE.CHERRY_PICK_ERROR) {
-        console.warn({ payload });
-        setState(prev => ({
-          ...prev,
-          loading: { ...prev.loading, cherryPickCTA: false },
-          cherryPickError: payload.cherryPickError,
-        }));
+        updateContextState(setState, {
+          cherryPick: { error: payload.cherryPickError },
+          loading: { cherryPickCTA: false },
+        });
         return;
       }
     };

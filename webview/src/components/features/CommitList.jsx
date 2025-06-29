@@ -1,12 +1,13 @@
+import Commit from '../common/Commit';
 import Button from '../common/Button';
 import Section from '../common/Section';
 import { useEffect, useState } from 'react';
 import { useMessage } from '../../hooks/useMessage';
+import { updateContextState } from '../../contexts/MessageContext';
 
 const CommitsList = () => {
   const { state, setState } = useMessage();
-  const { prCommits, isAuthenticated } = state;
-  const commits = prCommits || [];
+  const { app: { isAuthenticated = false } = {}, pullRequest: { commits = [] } = {} } = state;
   const [selectedCommits, setSelectedCommits] = useState([]);
   const [finalCommits, setFinalCommits] = useState([]);
 
@@ -25,10 +26,9 @@ const CommitsList = () => {
 
   const handleCherryPick = () => {
     const selected = commits.filter(commit => selectedCommits.includes(commit.sha));
-    setState(prev => ({
-      ...prev,
-      selectedCommits: selected,
-    }));
+    updateContextState(setState, {
+      pullRequest: { selectedCommits: selected },
+    });
     console.log('✅ Selected commits for cherry-pick:', selected);
     setFinalCommits(selected);
   };
@@ -38,11 +38,11 @@ const CommitsList = () => {
   if (finalCommits.length) {
     return (
       <Section>
-        <div className="finalCommitsDiv">
-          <label>Selected Commits</label>
-          {finalCommits.map(commit => {
-            return <span>{commit.message}</span>;
-          })}
+        <div className="commitList">
+          <label className="commitLabel">Selected Commits</label>
+          {finalCommits.map(commit => (
+            <Commit commit={commit} />
+          ))}
         </div>
       </Section>
     );
@@ -50,26 +50,12 @@ const CommitsList = () => {
 
   return (
     <Section>
-      <div className="commits-container">
+      <div className="commitList">
+        <label className="commitLabel">Please Select Commits</label>
         {commits.map(commit => (
-          <div className="commit-item" key={commit.sha}>
-            <label className="commit-label">{commit.message}</label>
-            <div className="commit-info">
-              <input type="checkbox" checked={selectedCommits.includes(commit.sha)} onChange={() => handleCheckboxChange(commit.sha)} />
-              <div className="commit-sha">{String(commit.sha).slice(0, 8)}</div>
-              <span className="commit-date">
-                {new Date(commit.date).toLocaleString('en-GB', {
-                  day: '2-digit',
-                  month: 'short',
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}
-              </span>
-            </div>
-          </div>
+          <Commit commit={commit} handleCheckboxChange={handleCheckboxChange} isInputRequired selectedCommits={selectedCommits} />
         ))}
-
-        <Button label="Confirm Commits" handleOnClick={handleCherryPick} />
+        <Button disabled={!selectedCommits.length} label="Confirm Commits" handleOnClick={handleCherryPick} />
       </div>
     </Section>
   );

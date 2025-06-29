@@ -1,41 +1,30 @@
-/* Section Component Style Starts */
-
+/* ---------------- Section Component Style ---------------- */
 .section {
   padding: 15px 0;
 }
-
-/* Only one section: top + bottom  */
 .section:only-of-type {
   border-top: 1px solid #363636;
   border-bottom: 1px solid #363636;
 }
-
-/* First section: top only */
 .section:first-of-type:not(:only-of-type) {
   border-top: 1px solid #363636;
   border-bottom: none;
 }
-
-/* Last section: bottom only (unless it's also second, see below) */
 .section:last-of-type:not(:only-of-type):not(:first-of-type) {
   border-top: none;
   border-bottom: 1px solid #363636;
 }
-
-/* Middle sections (between first and last) */
 .section:not(:first-of-type):not(:last-of-type) {
   border-top: 1px solid #363636;
   border-bottom: 1px solid #363636;
 }
-
-/* Two sections only */
 .section:first-of-type:not(:only-of-type) + .section:last-of-type {
   border-top: 1px solid #363636;
   border-bottom: 1px solid #363636;
 }
-/* Section Component Style Ends */
+/* --------------------------------------------------------- */
 
-/* AuthButtons Component Style Starts */
+/* ---------------- AuthButtons Component ------------------ */
 .authButtonsSection {
   display: flex;
   gap: 5px;
@@ -43,25 +32,22 @@
 .authButtonsSection button {
   width: 100%;
 }
-
 .authSuccessDiv {
   text-align: center;
   color: green;
   font-weight: 600;
 }
-
 .authErrorDiv {
   text-align: center;
   color: red;
   margin-top: 10px;
 }
-/* AuthButtons Component Style Ends */
+/* --------------------------------------------------------- */
 
-/* Button Component Style starts */
+/* ------------------ Button Component --------------------- */
 .buttonContainer {
   width: 100%;
 }
-
 .buttonContainer button {
   padding: 5px;
   background-color: #007acc;
@@ -72,42 +58,45 @@
   font-weight: 500;
   width: 100%;
 }
-
 .disabled button {
   background-color: #636363;
 }
+/* --------------------------------------------------------- */
 
-/* Button Component Style ends */
-
+/* ------------------ Search Input Area -------------------- */
 .searchInputContainer {
   display: flex;
   flex-direction: column;
   gap: 10px;
-
-  .errorlable {
-    word-wrap: break-word;
-    color: red;
-  }
 }
-
 .searchInput {
   padding: 5px;
 }
+.searchInputContainer .errorlable {
+  word-wrap: break-word;
+  color: red;
+}
+/* --------------------------------------------------------- */
 
+/* ------------------- Commits Area ------------------------ */
 .commits-container {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.commit-item {
+.commit-item,
+.commitItem {
   border: 1px solid #363636;
   border-radius: 5px;
   padding: 5px;
   word-wrap: break-word;
   display: flex;
-  flex-direction: column;
-  gap: 5px;
+  justify-content: space-between;
+  font-size: x-small;
+}
+.commitItem {
+  padding: 5px 3px;
 }
 
 .commit-label {
@@ -123,53 +112,68 @@
   width: 100%;
   justify-content: space-between;
 }
-
 .commit-info input {
   margin: 0px;
 }
+
 .commit-date {
   color: #666;
   font-weight: normal;
 }
-
 .commit-sha {
   font-size: 0.85rem;
   color: #999;
   overflow-wrap: break-word;
 }
 
-.finalCommitsDiv {
+.commitList {
   display: flex;
   flex-direction: column;
   gap: 5px;
   font-size: small;
 }
 
-.finalCommitsDiv span {
-  border: 1px solid #363636;
-  border-radius: 5px;
-  padding: 5px 3px;
-  word-wrap: break-word;
-}
-
-.pullrequestInfo {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-
-  .header {
-    margin: 0px;
-  }
-}
-
-.cherryPickSuccess {
-  word-wrap: break-word;
-  color: green;
+.commitInfo {
   display: flex;
   flex-direction: column;
   gap: 5px;
 }
+.commitInfo span {
+  color: gray;
+}
+/* --------------------------------------------------------- */
 
+/* -------------------- Pull Request Info ------------------ */
+.pullrequestInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.pullrequestInfo .header {
+  margin: 0px;
+}
+.pullrequestInfo span {
+  color: gray;
+}
+/* --------------------------------------------------------- */
+
+/* --------------------- Branch Info ----------------------- */
+.branchInfo span {
+  color: gray;
+}
+/* --------------------------------------------------------- */
+
+/* ------------------- Cherry Pick Info -------------------- */
+.cherryPickSuccess {
+  word-wrap: break-word;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  line-height: 16px;
+}
+.cherryPickSuccess span {
+  color: gray;
+}
 .cherryPickSuccess a {
   color: #4e4eff;
   margin-top: 5px;
@@ -179,3 +183,11 @@
   word-wrap: break-word;
   color: red;
 }
+/* --------------------------------------------------------- */
+
+/* -------------------- Global Tweaks ---------------------- */
+input:focus,
+a:focus {
+  outline: none;
+}
+/* --------------------------------------------------------- */
