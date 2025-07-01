@@ -30,7 +30,10 @@ export const initialCherryPickState = {
 
 export const initialAppState = {
   isAuthenticated: false,
-  authData: null,
+  authData: {
+    error: null,
+    provider: null,
+  },
 };
 
 export const initialContextState = {
@@ -74,7 +77,7 @@ const MessageProvider = ({ children }) => {
 
       if (type === MESSAGE_TYPE.AUTH_ERROR) {
         updateContextState(setState, {
-          app: { isAuthenticated: false, authData: { ...payload } },
+          app: { isAuthenticated: false, authData: { ...payload.authData } },
           loading: { github: false, bitbucket: false },
         });
         return;

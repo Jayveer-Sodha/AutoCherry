@@ -11,6 +11,7 @@ const CherryPick = () => {
     branch: { name = '' } = {},
     loading: { cherryPickCTA = false } = {},
     pullRequest: { selectedCommits = [] } = {},
+    app: { authData: { provider = null } } = {},
     cherryPick: { error = null, success = null } = {},
   } = state;
 
@@ -20,7 +21,7 @@ const CherryPick = () => {
     updateContextState(setState, { loading: { cherryPickCTA: true } });
     postToExtension({
       type: MESSAGE_TYPE.CHERRY_PICK_REQUEST,
-      payload: { targetBranch: name, commits: selectedCommits, provider: 'bitbucket' },
+      payload: { targetBranch: name, commits: selectedCommits, provider },
     });
   };
 

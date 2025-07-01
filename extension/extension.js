@@ -1,6 +1,6 @@
 const vscode = require('vscode');
-const { AutoCherryViewProvider } = require('./views/autoCherryView');
 const { bitbucketAuth } = require('./services/bitbucketService');
+const { AutoCherryViewProvider } = require('./views/autoCherryView');
 
 async function activate(context) {
   // 1. Register your webview

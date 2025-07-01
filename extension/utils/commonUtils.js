@@ -1,6 +1,6 @@
 const vscode = require('vscode');
 const { default: simpleGit } = require('simple-git');
-const { TOKEN_EXPIRY_BUFFER } = require('../../shared/constants');
+const { TOKEN_EXPIRY_BUFFER, AUTH_TYPE } = require('../../shared/constants');
 
 const stateCache = new Map();
 
@@ -88,4 +88,52 @@ async function getRepoPath() {
   return repo.rootUri.fsPath;
 }
 
-module.exports = { stateCache, generateState, getBitbucketAuthUrl, isTokenValid, isCachedTokenAvailable, getRepoPath, getBranchUrl, getRemoteUrl };
+function parseRemoteUrl(remoteUrl) {
+  if (!remoteUrl) return {};
+
+  const match = remoteUrl.match(/[:/]([^:/]+)\/([^/]+?)(\.git)?$/);
+  if (match) {
+    return {
+      owner: match[1],
+      repoSlug: match[2],
+    };
+  }
+
+  return {};
+}
+
+async function getRepoContext() {
+  const git = await getGitAPI();
+  if (!git) throw new Error('Git extension not available.');
+
+  const repo = git.repositories[0];
+  if (!repo) throw new Error('No Git repository found.');
+
+  const remoteUrl = repo.state.remotes[0]?.fetchUrl || '';
+  const currentBranch = repo.state.HEAD?.name || '';
+  const { owner, repoSlug } = parseRemoteUrl(remoteUrl);
+
+  const provider = remoteUrl.includes('bitbucket') ? AUTH_TYPE.BITBUCKET : remoteUrl.includes('github') ? AUTH_TYPE.GITHUB : 'unknown';
+
+  return {
+    repo,
+    owner,
+    repoSlug,
+    remoteUrl,
+    currentBranch,
+    provider,
+  };
+}
+
+module.exports = {
+  stateCache,
+  generateState,
+  getBitbucketAuthUrl,
+  isTokenValid,
+  isCachedTokenAvailable,
+  getRepoPath,
+  getBranchUrl,
+  getRemoteUrl,
+  getGitAPI,
+  getRepoContext,
+};

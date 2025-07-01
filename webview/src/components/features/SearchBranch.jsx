@@ -8,6 +8,7 @@ import { updateContextState } from '../../contexts/MessageContext';
 const SearchBranch = () => {
   const { state, setState } = useMessage();
   const {
+    app: { authData: { provider = null } = {} } = {},
     branch: { isAvailable = false, name = '', error = null } = {},
     loading: { searchBranchCTA = false } = {},
     pullRequest: { selectedCommits = [] } = {},
@@ -17,7 +18,7 @@ const SearchBranch = () => {
     updateContextState(setState, { loading: { searchBranchCTA: true } });
     postToExtension({
       type: MESSAGE_TYPE.FETCH_BRANCH_REQUEST,
-      payload: { branchName: query },
+      payload: { branchName: query, provider },
     });
   };
   if (!selectedCommits.length) return;

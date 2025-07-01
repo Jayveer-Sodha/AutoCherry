@@ -54,6 +54,7 @@
     "vite": "^7.0.0"
   },
   "dependencies": {
+    "@octokit/rest": "^22.0.0",
     "node-fetch": "^3.3.2",
     "simple-git": "^3.28.0"
   }

@@ -3,7 +3,7 @@ import Button from '../common/Button';
 import Section from '../common/Section';
 import { useMessage } from '../../hooks/useMessage';
 import { postToExtension } from '../../handlers/MessageHandlers';
-import { updateContextState } from '../../contexts/MessageContext';
+import { initialAppState, updateContextState } from '../../contexts/MessageContext';
 import { AUTH_TYPE, GIT_LABEL, MESSAGE_TYPE } from '../../../../shared/constants';
 
 const AuthButtons = () => {
@@ -15,7 +15,7 @@ const AuthButtons = () => {
 
   const requestAuth = useCallback(
     provider => {
-      updateContextState(setState, { app: { authData: null, loading: { [provider]: true } } });
+      updateContextState(setState, { app: { authData: initialAppState.authData, loading: { [provider]: true } } });
       postToExtension({
         type: MESSAGE_TYPE.AUTH_REQUEST,
         payload: { provider },
@@ -30,7 +30,6 @@ const AuthButtons = () => {
         <div className="authSuccessDiv">Connected to {authData.provider}</div>
       </Section>
     );
-
   return (
     <Section>
       <div className="authButtonsSection">

@@ -9,18 +9,21 @@ import { updateContextState } from '../../contexts/MessageContext';
 const CommitsSearchByPR = () => {
   const { state, setState } = useMessage();
   const {
-    app: { isAuthenticated = false } = {},
+    app: { isAuthenticated = false, authData: { provider = null } = {} } = {},
     pullRequest: { details = null, error = null } = {},
     loading: { fetchCommitsCTA = false } = {},
   } = state;
 
-  const handleSearch = useCallback(query => {
-    updateContextState(setState, { loading: { fetchCommitsCTA: true } });
-    postToExtension({
-      type: MESSAGE_TYPE.FETCH_COMMITS_REQUEST,
-      payload: { prId: query },
-    });
-  }, []);
+  const handleSearch = useCallback(
+    query => {
+      updateContextState(setState, { loading: { fetchCommitsCTA: true } });
+      postToExtension({
+        type: MESSAGE_TYPE.FETCH_COMMITS_REQUEST,
+        payload: { prId: query, provider },
+      });
+    },
+    [provider],
+  );
 
   if (!isAuthenticated) return;
   return (

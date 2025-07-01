@@ -1,6 +1,6 @@
 const vscode = require('vscode');
-const { generateState, stateCache, getBitbucketAuthUrl } = require('../utils/commonUtils');
-const { CLIENT_ID, REDIRECT_URI, CLIENT_SECRET, AUTH_TYPE } = require('../../shared/constants');
+const { CLIENT_ID, REDIRECT_URI, CLIENT_SECRET, AUTH_TYPE, BITBUCKET_TOKEN_KEY } = require('../../shared/constants');
+const { generateState, stateCache, getBitbucketAuthUrl, getGitAPI, isCachedTokenAvailable } = require('../utils/commonUtils');
 
 class BitbucketAuth {
   #resolve = null;
@@ -35,7 +35,6 @@ class BitbucketAuth {
     const state = query.get('state');
 
     if (!code || !state || !stateCache.has(state)) {
-      console.warn('[BitbucketAuth] Invalid or expired callback.');
       if (this.#reject) {
         this.#reject(new Error('Invalid or expired Bitbucket auth request.'));
         this.#cleanup();
@@ -54,32 +53,35 @@ class BitbucketAuth {
   async exchangeToken(code) {
     const basicAuth = Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64');
     console.warn('Basic token:', basicAuth);
+    try {
+      const res = await fetch('https://bitbucket.org/site/oauth2/access_token', {
+        method: 'POST',
+        headers: {
+          Authorization: 'Basic ' + basicAuth,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          grant_type: 'authorization_code',
+          code,
+          redirect_uri: REDIRECT_URI,
+        }),
+      });
 
-    const res = await fetch('https://bitbucket.org/site/oauth2/access_token', {
-      method: 'POST',
-      headers: {
-        Authorization: 'Basic ' + basicAuth,
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: new URLSearchParams({
-        grant_type: 'authorization_code',
-        code,
-        redirect_uri: REDIRECT_URI,
-      }),
-    });
+      if (!res.ok) {
+        const errText = await res.text();
+        throw new Error('Token exchange failed: ' + errText);
+      }
 
-    if (!res.ok) {
-      const errText = await res.text();
-      throw new Error('Token exchange failed: ' + errText);
+      const rawTokenData = await res.json();
+      const tokenData = {
+        ...rawTokenData,
+        created_at: Date.now(),
+      };
+
+      return tokenData;
+    } catch (error) {
+      console.warn({ error });
     }
-
-    const rawTokenData = await res.json();
-    const tokenData = {
-      ...rawTokenData,
-      created_at: Date.now(),
-    };
-
-    return tokenData;
   }
 
   #cleanup() {
@@ -100,14 +102,15 @@ class BitbucketRepoService {
     this.provider = AUTH_TYPE.BITBUCKET;
   }
 
-  static async create(token) {
+  static async connect(context) {
+    const token = await getBitbucketToken(context);
     const instance = new BitbucketRepoService(token);
     await instance.setBaseData();
     return instance;
   }
 
   async setBaseData() {
-    const git = await this.getGitAPI();
+    const git = await getGitAPI();
     if (!git) throw new Error('Git API not available.');
 
     this.repo = git.repositories[0] || null;
@@ -116,13 +119,6 @@ class BitbucketRepoService {
 
     this.setRepoDetails();
     return this;
-  }
-
-  async getGitAPI() {
-    const gitExtension = vscode.extensions.getExtension('vscode.git');
-    if (!gitExtension) return null;
-    const git = await gitExtension.activate();
-    return git.getAPI(1);
   }
 
   setRepoDetails() {
@@ -230,6 +226,18 @@ class BitbucketRepoService {
     return true; // exists and not merged
   }
 }
-
 const bitbucketAuth = new BitbucketAuth();
-module.exports = { bitbucketAuth, BitbucketRepoService };
+
+async function getBitbucketToken(context) {
+  if (!isCachedTokenAvailable(BITBUCKET_TOKEN_KEY, context)) {
+    const code = await bitbucketAuth.startAuthFlow();
+    const tokenData = await bitbucketAuth.exchangeToken(code);
+    await context.globalState.update(BITBUCKET_TOKEN_KEY, tokenData);
+    console.warn('[Bitbucket] Token acquired:', tokenData);
+    return tokenData.access_token;
+  }
+
+  return context.globalState.get(BITBUCKET_TOKEN_KEY).access_token;
+}
+
+module.exports = { bitbucketAuth, BitbucketRepoService, getBitbucketToken };
