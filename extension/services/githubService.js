@@ -53,8 +53,7 @@ class GithubService {
         url: pr.html_url,
       };
     } catch (err) {
-      console.error(`❌ Failed to fetch PR #${prId}:`, err);
-      return [];
+      throw new Error('Failed to fetch PR details: Not Found');
     }
   }
   async fetchPRCommits(prId) {
@@ -100,12 +99,10 @@ class GithubService {
       return true;
     } catch (err) {
       if (err.status === 404) {
-        // Branch does NOT exist
-        return false;
+        throw new Error(`Branch "${branchName}" does not exist.`);
       }
 
-      console.error(`❌ Failed to check branch "${branchName}":`, err);
-      throw err;
+      throw new Error(`Failed to check branch ${branchName}`);
     }
   }
 }

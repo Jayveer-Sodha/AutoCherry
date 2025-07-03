@@ -52,7 +52,6 @@ class BitbucketAuth {
 
   async exchangeToken(code) {
     const basicAuth = Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64');
-    console.warn('Basic token:', basicAuth);
     try {
       const res = await fetch('https://bitbucket.org/site/oauth2/access_token', {
         method: 'POST',
@@ -80,7 +79,7 @@ class BitbucketAuth {
 
       return tokenData;
     } catch (error) {
-      console.warn({ error });
+      throw new Error('Token exchange failed: ' + error.message || '');
     }
   }
 
@@ -180,7 +179,6 @@ class BitbucketRepoService {
 
       return commits;
     } catch (error) {
-      console.error('Error fetching commits:', error.message);
       throw new Error('Unable to fetch pull request commits.');
     }
   }
@@ -233,7 +231,6 @@ async function getBitbucketToken(context) {
     const code = await bitbucketAuth.startAuthFlow();
     const tokenData = await bitbucketAuth.exchangeToken(code);
     await context.globalState.update(BITBUCKET_TOKEN_KEY, tokenData);
-    console.warn('[Bitbucket] Token acquired:', tokenData);
     return tokenData.access_token;
   }
 

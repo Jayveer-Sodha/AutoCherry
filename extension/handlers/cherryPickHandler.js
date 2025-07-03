@@ -91,7 +91,6 @@ async function cherryPickHandler({ targetBranch, commits, provider, webview }) {
     await git.push('origin', targetBranch);
     await sendSuccess();
   } catch (err) {
-    console.error('❌ Unexpected cherry-pick error:', err);
     sendError(MESSAGE_TYPE.CHERRY_PICK_ERROR, {
       message: `Unexpected error: ${err.message || err}`,
     });

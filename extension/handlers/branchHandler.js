@@ -17,8 +17,6 @@ async function branchHandler({ branchName, provider, context, webview }) {
       throw new Error(`Unsupported provider: ${provider}`);
     }
 
-    console.warn({ isBranchAvailable });
-
     sendToWebview({
       webview,
       type: MESSAGE_TYPE.FETCH_BRANCH_SUCCESS,

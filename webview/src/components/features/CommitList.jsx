@@ -29,7 +29,6 @@ const CommitsList = () => {
     updateContextState(setState, {
       pullRequest: { selectedCommits: selected },
     });
-    console.log('✅ Selected commits for cherry-pick:', selected);
     setFinalCommits(selected);
   };
 

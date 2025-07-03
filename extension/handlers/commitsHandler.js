@@ -16,15 +16,12 @@ async function commitsHandler({ prId, provider, context, webview }) {
 
     const { prDetails, prCommits } = await service.fetchPullRequestWithCommits(prId);
 
-    console.warn('[commitsHandler] ✅ Fetched PR commits', { prDetails });
-
     sendToWebview({
       webview,
       type: MESSAGE_TYPE.FETCH_COMMITS_SUCCESS,
       payload: { prDetails, prCommits },
     });
   } catch (err) {
-    console.error('[commitsHandler] ❌ Commit fetch failed:', err.message);
     sendToWebview({
       webview,
       type: MESSAGE_TYPE.FETCH_COMMITS_ERROR,

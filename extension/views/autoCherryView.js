@@ -7,7 +7,6 @@ class AutoCherryViewProvider {
   }
 
   async resolveWebviewView(webviewView) {
-    console.log('📦 Resolving PullSync Webview');
     await initializeWebview({
       webviewView,
       context: this.context,
