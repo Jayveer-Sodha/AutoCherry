@@ -1,0 +1,10 @@
+Copyright (c) 2025 Jayveer Sodha
+
+All rights reserved.
+
+This software is licensed for personal, non-commercial use only.  
+You may not copy, modify, distribute, sublicense, or use any part of this codebase for commercial or personal purposes.
+
+Unauthorized commercial use, redistribution, or modification of this software or its components is strictly prohibited.
+
+Contact the author for any exceptions or licensing inquiries.
