@@ -18,71 +18,115 @@ Supports **GitHub** and **Bitbucket** repositories. Fully OAuth-enabled. Intuiti
 
 ---
 
-## 🖼️ Screenshots
-
-> _(Add screenshots for each step here — placeholders included below)_
-
-1. **Authentication screen**
-   ![auth](extension/assets/screens/authPage.png)
-
-2. **Fetch PR and select commits**
-   ![pr](assets/screens/pr.png)
-
-3. **Target branch & cherry-pick results**
-   ![result](assets/screens/result.png)
-
----
-
 ## 🧭 How It Works
 
 ### 1. **Authentication**
 
 When you open the AutoCherry panel:
 
-- Click either **GitHub** or **Bitbucket**.
-- A browser popup will ask for permissions (OAuth).
-- If successful: You'll see `"Connected to GitHub"` (or Bitbucket) on the panel.
-- ❗ If authentication fails, an error appears below the buttons.
-- ❌ If the current repo and selected provider mismatch (e.g., Bitbucket on a GitHub repo), an error is shown.
+- Choose either **GitHub** or **Bitbucket** to authenticate.
+- A browser tab will open for OAuth permissions.
+- Once allowed, you'll be redirected back to VS Code.
+
+📸 **Initial View (Choose Provider)**
+![Auth Screen](extension/assets/screens/AuthCTA.png)
+
+✅ **If successful**: You'll see a connection message like `Connected to GitHub`.
+![Success](extension/assets/screens/AuthSuccess.png)
+
+❌ **If authentication fails**: An error is shown below the buttons.
+![Error](extension/assets/screens/AuthError.png)
+
+❗ **If the repo host doesn’t match the provider selected** (e.g., Bitbucket selected for a GitHub repo), an error will appear too.
+![Error](extension/assets/screens/WrongHostError.png)
 
 ---
 
 ### 2. **Pull Request Fetch**
 
-- Once authenticated:
-  - You'll see a labeled field: **"Enter pull request number..."**
-  - Enter a valid PR number and click **Fetch Commits**
-  - ✅ If successful: PR details and commit list are shown
-  - ❌ If failed: A red error message appears below the button
+After authentication, the next section prompts:
+
+- Enter the pull request number in the field labeled: **“Enter pull request number...”**
+- Click **Fetch Commits**
+
+📸 **Fetch PR UI**
+✅ **Success**: Shows PR info and commits
+![PR Info](extension/assets/screens/SelectCommits.png)
+
+❌ **Failure**: Shows a red error message below the button.
+![Fetch PR Failure](extension/assets/screens/PullRequestSearchError.png)
 
 ---
 
 ### 3. **Select Commits**
 
-- Commit list includes:
+If commits are found:
 
-  - 📝 Message
-  - 🔢 Commit SHA
-  - 🕒 Timestamp
-  - ⬜️ Checkbox to select each commit
+- A list appears titled: **“Please Select Commits”**
+- Each item includes:
 
-- Click **"Confirm Commits"** to proceed
+  - 📝 Commit message
+  - 🆔 SHA
+  - 🕒 Time
+  - ⬜ Checkbox to select
+
+📸 **Commit List**
+![Select Commits](extension/assets/screens/SelectCommits.png)
+
+Click **Confirm Commits** to move forward.
 
 ---
 
 ### 4. **Target Branch Selection**
 
-- Confirmed commits will be shown under **"Selected Commits"**
-- Enter the target branch name in the new field: **"Enter branch name..."**
-- Click **Search**
-  - ✅ If found and not merged: displays target info like `Target Branch: new-ship-int-hotfix`
-  - ❌ If not found or merged: error message shown
+Now you’ll see:
+
+- A list of selected commits under **“Selected Commits”**
+- A new input: **“Enter branch name...”** and a **Search** button
+
+📸 **Selected Commits View**
+![Selected Commits](extension/assets/screens/SelectedCommits.png)
+
+✅ If branch exists and is valid:
+
+- Info appears like: `Target Branch: new-ship-int-hotfix`
+  ![Branch Exists](extension/assets/screens/CherryPickCTA.png)
+
+❌ If not found or already merged:
+
+- An error is shown.
+
+📸 **Branch Not Found / Error Example**
+![Branch Error](extension/assets/screens/BranchSearchError.png)
 
 ---
 
 ### 5. **Cherry-Pick Execution**
 
-- When the target is validated, click **"Let's cherry pick"**
-- You'll see one of the following results:
+Once the target branch is found:
 
-#### ✅ Success:
+- Click **Let’s cherry pick** to begin
+- Results will vary depending on outcome:
+
+#### ✅ **Success: Commits Pushed**
+
+Shows how many commits were cherry-picked and a link to the branch.
+
+📸
+![Cherry Pick Success](extension/assets/screens/CherryPickPushed.png)
+
+#### 🔁 **Skipped: Duplicates**
+
+If some commits already exist, they’ll be skipped.
+
+📸
+![Cherry Pick Skipped](extension/assets/screens/CherryPickSkipped.png)
+
+#### ❌ **Merge Conflict**
+
+If a conflict occurs, an error message appears.
+
+📸
+![Merge Conflict Error](extension/assets/screens/CherryPickMergeError.png)
+
+---
