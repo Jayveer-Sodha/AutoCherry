@@ -29,15 +29,19 @@ When you open the AutoCherry panel:
 - Once allowed, you'll be redirected back to VS Code.
 
 📸 **Initial View (Choose Provider)**
+
 ![Auth Screen](extension/assets/screens/AuthCTA.png)
 
 ✅ **If successful**: You'll see a connection message like `Connected to GitHub`.
+
 ![Success](extension/assets/screens/AuthSuccess.png)
 
 ❌ **If authentication fails**: An error is shown below the buttons.
+
 ![Error](extension/assets/screens/AuthError.png)
 
 ❗ **If the repo host doesn’t match the provider selected** (e.g., Bitbucket selected for a GitHub repo), an error will appear too.
+
 ![Error](extension/assets/screens/WrongHostError.png)
 
 ---
@@ -51,9 +55,11 @@ After authentication, the next section prompts:
 
 📸 **Fetch PR UI**
 ✅ **Success**: Shows PR info and commits
+
 ![PR Info](extension/assets/screens/SelectCommits.png)
 
 ❌ **Failure**: Shows a red error message below the button.
+
 ![Fetch PR Failure](extension/assets/screens/PullRequestSearchError.png)
 
 ---
@@ -71,6 +77,7 @@ If commits are found:
   - ⬜ Checkbox to select
 
 📸 **Commit List**
+
 ![Select Commits](extension/assets/screens/SelectCommits.png)
 
 Click **Confirm Commits** to move forward.
@@ -85,18 +92,21 @@ Now you’ll see:
 - A new input: **“Enter branch name...”** and a **Search** button
 
 📸 **Selected Commits View**
+
 ![Selected Commits](extension/assets/screens/SelectedCommits.png)
 
 ✅ If branch exists and is valid:
 
 - Info appears like: `Target Branch: new-ship-int-hotfix`
-  ![Branch Exists](extension/assets/screens/CherryPickCTA.png)
+
+![Branch Exists](extension/assets/screens/CherryPickCTA.png)
 
 ❌ If not found or already merged:
 
 - An error is shown.
 
 📸 **Branch Not Found / Error Example**
+
 ![Branch Error](extension/assets/screens/BranchSearchError.png)
 
 ---
