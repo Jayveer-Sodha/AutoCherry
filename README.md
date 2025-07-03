@@ -51,6 +51,9 @@ When you open the AutoCherry panel:
 After authentication, the next section prompts:
 
 - Enter the pull request number in the field labeled: **“Enter pull request number...”**
+
+![PR Search](extension/assets/screens/AuthSuccess.png)
+
 - Click **Fetch Commits**
 
 📸 **Fetch PR UI**
