@@ -35,4 +35,4 @@ export const BITBUCKET_TOKEN_KEY = 'bitbucketToken';
 export const GITHUB_TOKEN_KEY = 'githubToken';
 export const CLIENT_ID = 'dFYtPv8cv2dUyBYvvT';
 export const CLIENT_SECRET = '9dvgWJZDNUEm6cptmjhXz8cs6sYLjnbw';
-export const REDIRECT_URI = 'vscode://jayveer-sodha.autocherry/auth-callback';
+export const REDIRECT_URI = 'vscode://jayveersodha.autocherry/auth-callback';
