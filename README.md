@@ -30,19 +30,19 @@ When you open the AutoCherry panel:
 
 📸 **Initial View (Choose Provider)**
 
-![Auth Screen](extension/assets/screens/AuthCTA.png)
+![Auth Screen](media/AuthCTA.png)
 
 ✅ **If successful**: You'll see a connection message like `Connected to GitHub`.
 
-![Success](extension/assets/screens/AuthSuccess.png)
+![Success](media/AuthSuccess.png)
 
 ❌ **If authentication fails**: An error is shown below the buttons.
 
-![Error](extension/assets/screens/AuthError.png)
+![Error](media/AuthError.png)
 
 ❗ **If the repo host doesn’t match the provider selected** (e.g., Bitbucket selected for a GitHub repo), an error will appear too.
 
-![Error](extension/assets/screens/WrongHostError.png)
+![Error](media/WrongHostError.png)
 
 ---
 
@@ -52,18 +52,18 @@ After authentication, the next section prompts:
 
 - Enter the pull request number in the field labeled: **“Enter pull request number...”**
 
-![PR Search](extension/assets/screens/AuthSuccess.png)
+![PR Search](media/AuthSuccess.png)
 
 - Click **Fetch Commits**
 
 📸 **Fetch PR UI**
 ✅ **Success**: Shows PR info and commits
 
-![PR Info](extension/assets/screens/SelectCommits.png)
+![PR Info](media/SelectCommits.png)
 
 ❌ **Failure**: Shows a red error message below the button.
 
-![Fetch PR Failure](extension/assets/screens/PullRequestSearchError.png)
+![Fetch PR Failure](media/PullRequestSearchError.png)
 
 ---
 
@@ -81,7 +81,7 @@ If commits are found:
 
 📸 **Commit List**
 
-![Select Commits](extension/assets/screens/SelectCommits.png)
+![Select Commits](media/SelectCommits.png)
 
 Click **Confirm Commits** to move forward.
 
@@ -96,13 +96,13 @@ Now you’ll see:
 
 📸 **Selected Commits View**
 
-![Selected Commits](extension/assets/screens/SelectedCommits.png)
+![Selected Commits](media/SelectedCommits.png)
 
 ✅ If branch exists and is valid:
 
 - Info appears like: `Target Branch: new-ship-int-hotfix`
 
-![Branch Exists](extension/assets/screens/CherryPickCTA.png)
+![Branch Exists](media/CherryPickCTA.png)
 
 ❌ If not found or already merged:
 
@@ -110,7 +110,7 @@ Now you’ll see:
 
 📸 **Branch Not Found / Error Example**
 
-![Branch Error](extension/assets/screens/BranchSearchError.png)
+![Branch Error](media/BranchSearchError.png)
 
 ---
 
@@ -126,20 +126,20 @@ Once the target branch is found:
 Shows how many commits were cherry-picked and a link to the branch.
 
 📸
-![Cherry Pick Success](extension/assets/screens/CherryPickPushed.png)
+![Cherry Pick Success](media/CherryPickPushed.png)
 
 #### 🔁 **Skipped: Duplicates**
 
 If some commits already exist, they’ll be skipped.
 
 📸
-![Cherry Pick Skipped](extension/assets/screens/CherryPickSkipped.png)
+![Cherry Pick Skipped](media/CherryPickSkipped.png)
 
 #### ❌ **Merge Conflict**
 
 If a conflict occurs, an error message appears.
 
 📸
-![Merge Conflict Error](extension/assets/screens/CherryPickMergeError.png)
+![Merge Conflict Error](media/CherryPickMergeError.png)
 
 ---

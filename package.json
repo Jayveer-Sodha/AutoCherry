@@ -3,7 +3,8 @@
   "displayName": "AutoCherry",
   "publisher": "jayveersodha",
   "description": "AutoCherry lets you quickly cherry-pick one or more commits across branches without touching the command line. Simple, fast, and built right into VS Code.",
-  "version": "0.0.1",
+  "icon": "media/cherry.png",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.101.0"
   },
@@ -20,7 +21,7 @@
         {
           "id": "autocherry",
           "title": "AutoCherry",
-          "icon": "extension/assets/cherry.png"
+          "icon": "media/cherry.png"
         }
       ]
     },
@@ -30,7 +31,7 @@
           "type": "webview",
           "id": "autoCherryView",
           "name": " 🚀 Smart Cherry-Picker",
-          "icon": "extension/public/cherry.png"
+          "icon": "media/cherry.png"
         }
       ]
     }
