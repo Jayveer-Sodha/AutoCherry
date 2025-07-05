@@ -1,5 +1,5 @@
 const vscode = require('vscode');
-const { CLIENT_ID, REDIRECT_URI, CLIENT_SECRET, AUTH_TYPE, BITBUCKET_TOKEN_KEY } = require('../../shared/constants');
+const { CLIENT_ID, REDIRECT_URI, AUTH_TYPE, BITBUCKET_TOKEN_KEY, WEB_TOKEN_URL } = require('../../shared/constants');
 const { generateState, stateCache, getBitbucketAuthUrl, getGitAPI, isCachedTokenAvailable } = require('../utils/commonUtils');
 
 class BitbucketAuth {
@@ -49,21 +49,12 @@ class BitbucketAuth {
       this.#cleanup();
     }
   }
-
   async exchangeToken(code) {
-    const basicAuth = Buffer.from(`${CLIENT_ID}:${CLIENT_SECRET}`).toString('base64');
     try {
-      const res = await fetch('https://bitbucket.org/site/oauth2/access_token', {
+      const res = await fetch(WEB_TOKEN_URL, {
         method: 'POST',
-        headers: {
-          Authorization: 'Basic ' + basicAuth,
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-          grant_type: 'authorization_code',
-          code,
-          redirect_uri: REDIRECT_URI,
-        }),
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ code }).toString(),
       });
 
       if (!res.ok) {
@@ -71,12 +62,7 @@ class BitbucketAuth {
         throw new Error('Token exchange failed: ' + errText);
       }
 
-      const rawTokenData = await res.json();
-      const tokenData = {
-        ...rawTokenData,
-        created_at: Date.now(),
-      };
-
+      const tokenData = await res.json();
       return tokenData;
     } catch (error) {
       throw new Error('Token exchange failed: ' + error.message || '');

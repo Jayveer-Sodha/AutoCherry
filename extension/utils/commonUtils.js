@@ -1,6 +1,7 @@
 const vscode = require('vscode');
 const { default: simpleGit } = require('simple-git');
-const { TOKEN_EXPIRY_BUFFER, AUTH_TYPE } = require('../../shared/constants');
+const { TOKEN_EXPIRY_BUFFER, AUTH_TYPE, MESSAGE_TYPE } = require('../../shared/constants');
+const { sendToWebview } = require('../handlers/webviewHandler');
 
 const stateCache = new Map();
 
@@ -103,31 +104,51 @@ function parseRemoteUrl(remoteUrl) {
 }
 
 async function getRepoContext() {
-  const git = await getGitAPI();
-  if (!git) throw new Error('Git extension not available.');
+  try {
+    const git = await getGitAPI();
+    if (!git) throw new Error('Git extension not available.');
 
-  const repo = git.repositories[0];
-  if (!repo) throw new Error('No Git repository found.');
+    const repo = await waitForRepository(git);
+    if (!repo) return null;
 
-  const remoteUrl = repo.state.remotes[0]?.fetchUrl || '';
-  const currentBranch = repo.state.HEAD?.name || '';
-  const { owner, repoSlug } = parseRemoteUrl(remoteUrl);
+    const remoteUrl = repo.state.remotes[0]?.fetchUrl || '';
+    const currentBranch = repo.state.HEAD?.name || '';
+    const { owner, repoSlug } = parseRemoteUrl(remoteUrl);
 
-  const provider = remoteUrl.includes('bitbucket') ? AUTH_TYPE.BITBUCKET : remoteUrl.includes('github') ? AUTH_TYPE.GITHUB : 'unknown';
+    const provider = remoteUrl.includes('bitbucket') ? AUTH_TYPE.BITBUCKET : remoteUrl.includes('github') ? AUTH_TYPE.GITHUB : 'unknown';
 
-  return {
-    repo,
-    owner,
-    repoSlug,
-    remoteUrl,
-    currentBranch,
-    provider,
-  };
+    return {
+      repo,
+      owner,
+      repoSlug,
+      remoteUrl,
+      currentBranch,
+      provider,
+    };
+  } catch (error) {
+    throw new Error(`Failed to get the repository context: ${error.message}`);
+  }
+}
+
+async function getRepoProvider({ webview }) {
+  try {
+    const { provider = null } = await getRepoContext();
+
+    if (provider) {
+      sendToWebview({ type: MESSAGE_TYPE.PROVIDER_SUCCESS, payload: { provider }, webview });
+    } else {
+      throw new Error('Provider not found');
+    }
+  } catch (error) {
+    const errorMessage = `Repository not found: ${error.message}`;
+    sendToWebview({ type: MESSAGE_TYPE.PROVIDER_ERROR, payload: { provider: null, error: { message: errorMessage } }, webview });
+  }
 }
 
 module.exports = {
   stateCache,
   generateState,
+  getRepoProvider,
   getBitbucketAuthUrl,
   isTokenValid,
   isCachedTokenAvailable,

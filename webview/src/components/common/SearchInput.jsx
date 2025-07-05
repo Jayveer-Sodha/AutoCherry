@@ -2,20 +2,23 @@ import Button from './Button';
 import { useEffect, useState } from 'react';
 
 const SearchInput = ({
-  error = 'text',
   inputPlaceholder = 'Type...',
   onSearch,
   buttonLabel = 'Search',
   inputLabel = 'Enter pull request number...',
   isLoading,
+  error = null,
   type = undefined,
 }) => {
   const [value, setValue] = useState('');
   const [searchError, setSearchError] = useState(null);
-
+  let isDisable = !value;
+  console.warn({ error });
   useEffect(() => {
-    if (error) {
-      setSearchError(error);
+    setSearchError(error);
+    if (error === null) {
+      setValue('');
+      isDisable = false;
     }
   }, [error]);
 
@@ -32,19 +35,25 @@ const SearchInput = ({
     }
   };
 
-  const isDisable = !value;
+  const handleOnKeyDown = e => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleOnClick(e);
+    }
+  };
+
   return (
-    <div className="searchInputContainer">
+    <form className="searchInputContainer" onSubmit={handleOnClick} onKeyDown={handleOnKeyDown}>
       <label>{inputLabel}</label>
       <input type={type} value={value} onChange={handleChange} placeholder={inputPlaceholder} className="searchInput" />
-      <Button isLoading={isLoading} disabled={isDisable} label={buttonLabel} handleOnClick={handleOnClick} />
+      <Button buttonType="submit" isLoading={isLoading} disabled={isDisable} label={buttonLabel} />
       {searchError?.key && value && !isLoading && (
         <div className="errorlable">
           <strong>{searchError?.key}</strong>
           <span>{searchError?.value}</span>
         </div>
       )}
-    </div>
+    </form>
   );
 };
 

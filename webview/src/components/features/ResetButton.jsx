@@ -5,9 +5,12 @@ import { initialContextState } from '../../contexts/MessageContext';
 
 const ResetButton = () => {
   const { setState, state } = useMessage();
-  const { app: { isAuthenticated } = {} } = state;
+  const { app: { isAuthenticated, authData: { provider = null } = {} } = {} } = state;
+
   const handleOnClick = () => {
-    setState(initialContextState);
+    initialContextState.app.authData.provider = provider;
+    initialContextState.app.isAuthenticated = isAuthenticated;
+    setState({ ...initialContextState });
   };
 
   if (!isAuthenticated) return;

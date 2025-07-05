@@ -8,6 +8,7 @@ export const initialLoadingState = {
   bitbucket: false,
   fetchCommitsCTA: false,
   searchBranchCTA: false,
+  isfetchingProvider: false,
 };
 
 export const initialPullRequestState = {
@@ -66,6 +67,22 @@ const MessageProvider = ({ children }) => {
   useEffect(() => {
     const handleMessage = event => {
       const { type, payload } = event.data;
+
+      if (type === MESSAGE_TYPE.PROVIDER_SUCCESS) {
+        updateContextState(setState, {
+          app: { authData: { ...payload } },
+          loading: { isfetchingProvider: false },
+        });
+        return;
+      }
+
+      if (type === MESSAGE_TYPE.PROVIDER_ERROR) {
+        updateContextState(setState, {
+          app: { authData: { ...payload } },
+          loading: { isfetchingProvider: false },
+        });
+        return;
+      }
 
       if (type === MESSAGE_TYPE.AUTH_SUCCESS) {
         updateContextState(setState, {

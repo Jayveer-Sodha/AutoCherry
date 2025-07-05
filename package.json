@@ -1,10 +1,10 @@
 {
-  "name": "autocherry",
-  "displayName": "AutoCherry",
+  "name": "cherrypicker",
+  "displayName": "CherryPicker",
   "publisher": "jayveersodha",
-  "description": "AutoCherry lets you quickly cherry-pick one or more commits across branches without touching the command line. Simple, fast, and built right into VS Code.",
+  "description": "CherryPicker lets you quickly cherry-pick one or more commits across branches without touching the command line. Simple, fast, and built right into VS Code.",
   "icon": "media/cherry.png",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "engines": {
     "vscode": "^1.101.0"
   },
@@ -19,17 +19,17 @@
     "viewsContainers": {
       "activitybar": [
         {
-          "id": "autocherry",
-          "title": "AutoCherry",
+          "id": "cherrypicker",
+          "title": "CherryPicker",
           "icon": "media/cherry.png"
         }
       ]
     },
     "views": {
-      "autocherry": [
+      "cherrypicker": [
         {
           "type": "webview",
-          "id": "autoCherryView",
+          "id": "cherrypickerView",
           "name": " 🚀 Smart Cherry-Picker",
           "icon": "media/cherry.png"
         }

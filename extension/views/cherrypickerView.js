@@ -1,7 +1,7 @@
 const { handleWebviewMessage } = require('../handlers/messageHandler');
 const { initializeWebview } = require('../handlers/webviewHandler');
 
-class AutoCherryViewProvider {
+class CherryPickerViewProvider {
   constructor(context) {
     this.context = context;
   }
@@ -17,4 +17,4 @@ class AutoCherryViewProvider {
   }
 }
 
-module.exports = { AutoCherryViewProvider };
+module.exports = { CherryPickerViewProvider };

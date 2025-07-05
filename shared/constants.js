@@ -4,6 +4,12 @@ export const AUTH_TYPE = {
 };
 
 export const MESSAGE_TYPE = {
+  RELOAD_APP: 'reload',
+  // Provider request message types
+  PROVIDER_REQUEST: 'providerRequest',
+  PROVIDER_SUCCESS: 'providerSuccess',
+  PROVIDER_ERROR: 'providerError',
+
   // Auth request message types
   AUTH_REQUEST: 'authRequest',
   AUTH_SUCCESS: 'authSuccess',
@@ -33,6 +39,6 @@ export const GIT_LABEL = {
 export const TOKEN_EXPIRY_BUFFER = 60 * 1000;
 export const BITBUCKET_TOKEN_KEY = 'bitbucketToken';
 export const GITHUB_TOKEN_KEY = 'githubToken';
-export const CLIENT_ID = 'dFYtPv8cv2dUyBYvvT';
-export const CLIENT_SECRET = '9dvgWJZDNUEm6cptmjhXz8cs6sYLjnbw';
-export const REDIRECT_URI = 'vscode://jayveersodha.autocherry/auth-callback';
+export const CLIENT_ID = 'Kp8Z4TqpWvkmU43Puq';
+export const REDIRECT_URI = 'vscode://jayveersodha.cherrypicker/auth-callback';
+export const WEB_TOKEN_URL = 'https://www.jayveerx.com/api/exchange-token';
