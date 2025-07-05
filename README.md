@@ -1,6 +1,6 @@
-# 🍒 AutoCherry - Smart Git Cherry-Picking in VS Code
+# 🍒 CherryPicker - Smart Git Cherry-Picking in VS Code
 
-**AutoCherry** helps you cherry-pick commits from pull requests across branches — directly inside **Visual Studio Code** — with zero need to touch the command line.
+**CherryPicker** helps you cherry-pick commits from pull requests across branches — directly inside **Visual Studio Code** — with zero need to touch the command line.
 
 Supports **GitHub** and **Bitbucket** repositories. Fully OAuth-enabled. Intuitive. Clean. Fast.
 
@@ -20,29 +20,31 @@ Supports **GitHub** and **Bitbucket** repositories. Fully OAuth-enabled. Intuiti
 
 ## 🧭 How It Works
 
+Absolutely — here's the updated section in your exact formatting style, reflecting the new automatic detection behavior:
+
+---
+
 ### 1. **Authentication**
 
-When you open the AutoCherry panel:
+When you open the Cherry Picker panel:
 
-- Choose either **GitHub** or **Bitbucket** to authenticate.
-- A browser tab will open for OAuth permissions.
-- Once allowed, you'll be redirected back to VS Code.
+- The extension **automatically detects the current Git repository** in your workspace.
+- Based on the detected repo host (e.g., GitHub or Bitbucket), it will **display the appropriate provider button**.
+- Click the shown button to authenticate via OAuth.
+- A browser tab will open to request permissions.
+- Once approved, you'll be redirected back to VS Code.
 
-📸 **Initial View (Choose Provider)**
+📸 **Initial View (Auto-Detected Provider)**
 
 ![Auth Screen](media/AuthCTA.png)
 
-✅ **If successful**: You'll see a connection message like `Connected to GitHub`.
+✅ **If successful**: You'll see a message like `Connected to GitHub`.
 
 ![Success](media/AuthSuccess.png)
 
-❌ **If authentication fails**: An error is shown below the buttons.
+❌ **If authentication fails**: An error is shown below the button.
 
 ![Error](media/AuthError.png)
-
-❗ **If the repo host doesn’t match the provider selected** (e.g., Bitbucket selected for a GitHub repo), an error will appear too.
-
-![Error](media/WrongHostError.png)
 
 ---
 
